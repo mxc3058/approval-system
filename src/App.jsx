@@ -37,11 +37,11 @@ function App() {
 
             {/* 主要内容区域 */}
             <Content style={{ background: '#f0f2f5' }}>
-              <Routes>
+              <Routes>{/* 路由配置 */}  
                 <Route path="/" element={<List />} />
                 <Route path="/create" element={<CreateEdit />} />
                 <Route path="/edit/:id" element={<CreateEdit />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<Navigate to="/" replace />} />{/*未匹配路径重定向到主页*/ }
               </Routes>
             </Content>
           </Layout>

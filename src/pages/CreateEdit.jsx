@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Form,
-  Input,
-  Button,
-  Card,
-  DatePicker,
-  message,
-  Space,
+  Form,//表单
+  Input,//输入框
+  Button,//按钮
+  Card,//卡片
+  DatePicker,//日期选择器
+  message,//消息提示
+  Space,//间距
   
 } from 'antd';
 import { SaveOutlined, ArrowLeftOutlined } from '@ant-design/icons';
@@ -18,40 +18,41 @@ import { PageHeader } from '@ant-design/pro-components';
 const { TextArea } = Input;
 
 const CreateEdit = () => {
-  const [form] = Form.useForm();
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const [form] = Form.useForm();//表单实例
+  const navigate = useNavigate();//路由导航
+  const { id } = useParams();//获取路由参数
   const [loading, setLoading] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);//是否编辑模式
 
-  // 初始化数据
+  //加载编辑数据
   useEffect(() => {
     if (id) {
       setIsEditing(true);
-      const record = mockApprovals.find(item => item.id === parseInt(id));
+      const record = mockApprovals.find(item => item.id === parseInt(id));// 从mock数据中查找对应记录
       if (record) {
+        // 填充表单数据
         form.setFieldsValue({
           projectName: record.projectName,
           content: record.content,
           department: record.department,
-          executeDate: dayjs(record.executeDate)
+          executeDate: dayjs(record.executeDate)//字符串转换为dayjs对象
         });
       }
     }
-  }, [id, form]);
-
+  }, [id, form]);//依赖id和form变化时执行useEffect
+   //提交表单
   const handleSubmit = async (values) => {
-    setLoading(true);
+    setLoading(true);//提交加载状态
     try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
       
+      await new Promise(resolve => setTimeout(resolve, 1000));//模拟API调用等待
+      // 构建提交数据
       const approvalData = {
         ...values,
-        executeDate: values.executeDate.format('YYYY-MM-DD'),
-        id: isEditing ? parseInt(id) : Date.now(),
+        executeDate: values.executeDate.format('YYYY-MM-DD'),//格式化日期
+        id: isEditing ? parseInt(id) : Date.now(),//新建时用时间戳作为ID
         status: 'pending',
-        createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),//创建时间
         approveTime: '--',
         applicant: '当前用户', // 实际项目中从登录信息获取
         approver: '审批人'
@@ -60,14 +61,14 @@ const CreateEdit = () => {
       console.log('提交数据:', approvalData);
       
       message.success(isEditing ? '审批单更新成功！' : '审批单创建成功！');
-      navigate('/');
+      navigate('/')//返回列表页
     } catch (error) {
       message.error('提交失败，请重试');
     } finally {
       setLoading(false);
     }
   };
-
+//草稿保存
   const handleSaveDraft = () => {
     form.validateFields()
       .then(values => {
@@ -97,13 +98,16 @@ const CreateEdit = () => {
           form={form}
           layout="vertical"
           onFinish={handleSubmit}
+          
+          //表单初始值
           initialValues={{
             projectName: '',
             content: '',
             department: [],
-            executeDate: dayjs().add(7, 'day') // 默认7天后
+            executeDate: dayjs().add(7, 'day') // 默认执行日期为一周后
           }}
         >
+          {/* 四个表单字段 */}
           <Form.Item
             name="projectName"
             label="审批项目"

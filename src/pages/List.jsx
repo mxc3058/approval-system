@@ -1,31 +1,32 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Table,
+  Table,  //表格
   Button,
-  Space,
-  Input,
-  Select,
-  DatePicker,
-  Card,
-  Row,
+  Space,  //间距
+  Input,  //输入框
+  Select,  //下拉选择
+  DatePicker,  //日期选择器
+  Card,  //卡片
+  Row,   //网格布局
   Col
 } from 'antd';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';//路由导航
 import { useRole } from '../contexts/RoleContext';
-import { mockApprovals } from '../utils/mockData';
+import { mockApprovals } from '../utils/mockData';//模拟数据
 import StatusTag from '../components/StatusTag';
-import DepartmentCascader from '../components/DepartmentCascader';
-import DetailDrawer from './DetailDrawer';
+import DepartmentCascader from '../components/DepartmentCascader';//部门级联选择器
+import DetailDrawer from './DetailDrawer';//详情抽屉组件
 
-const { Search } = Input;
-const { Option } = Select;
-const { RangePicker } = DatePicker;
+const { Search } = Input;//搜索输入框
+const { Option } = Select;//选择项
+const { RangePicker } = DatePicker;//日期范围选择器
 
 const List = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate();//路由导航
   const { role } = useRole();
-  const [approvals, setApprovals] = useState(mockApprovals);
+  const [approvals, setApprovals] = useState(mockApprovals);//审批数据
+  // 筛选条件默认值
   const [filters, setFilters] = useState({
     status: '',
     projectName: '',
@@ -59,13 +60,14 @@ const List = () => {
     // 部门筛选
     if (filters.department.length > 0) {
       data = data.filter(item => 
-        JSON.stringify(item.department) === JSON.stringify(filters.department)
+        JSON.stringify(item.department) === JSON.stringify(filters.department)//引用类型完全匹配
       );
     }
     
     return data;
-  }, [approvals, filters, role]);
-
+  }, [approvals, filters, role]);//缓存结果，approvals、filters、role 变化时才重新计算
+    
+// 表格列定义表头
   const columns = [
     {
       title: '审批项目',
@@ -125,7 +127,7 @@ const List = () => {
       ),
     },
   ];
-
+// 筛选条件更新处理
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
@@ -134,7 +136,7 @@ const List = () => {
     <div style={{ padding: '24px' }}>
       <Card>
         {/* 筛选区域 */}
-        <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+      <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>{/* 间距16px */}
           <Col span={6}>
             <Search
               placeholder="搜索审批项目"
@@ -196,8 +198,8 @@ const List = () => {
 
       {/* 详情抽屉 */}
       <DetailDrawer
-        visible={detailVisible}
-        record={selectedRecord}
+        visible={detailVisible}//是否可见
+        record={selectedRecord}//当前记录
         onClose={() => setDetailVisible(false)}
         onApprovalChange={(newRecord) => {
           setApprovals(prev => 

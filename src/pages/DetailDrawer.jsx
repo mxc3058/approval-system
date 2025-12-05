@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Drawer,
-  Descriptions,
-  Button,
-  Space,
-  message,
-  Tag,
-  Divider
+  Drawer,//抽屉
+  Descriptions,//描述列表
+  Button,//按钮
+  Space,  //间距
+  message,//消息提示
+  Tag,//标签
+  Divider  //分割线
 } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useRole } from '../contexts/RoleContext';
@@ -14,28 +14,35 @@ import StatusTag from '../components/StatusTag';
 
 const DetailDrawer = ({ visible, record, onClose, onApprovalChange }) => {
   const { role } = useRole();
-  const [approving, setApproving] = useState(false);
+  const [approving, setApproving] = useState(false);//加载状态
 
   if (!record) return null;
-
+  
+  //  设置加载状态
   const handleApprove = async (action) => {
     setApproving(true);
     try {
-      // 模拟API调用
+     
+      // 用时延模拟API调用等待
       await new Promise(resolve => setTimeout(resolve, 800));
-      
+       
+      // 构建更新后的记录
       const updatedRecord = {
         ...record,
         status: action === 'approve' ? 'approved' : 'rejected',
         approveTime: new Date().toLocaleString('zh-CN')
       };
+       // 通知父组件数据已更新
 
       onApprovalChange(updatedRecord);
+      // 显示成功提示
       message.success(action === 'approve' ? '审批通过！' : '审批已拒绝！');
+       // 关闭抽屉
       onClose();
     } catch (error) {
       message.error('操作失败，请重试');
     } finally {
+     // 无论成功失败，都关闭加载状态
       setApproving(false);
     }
   };
@@ -45,11 +52,12 @@ const DetailDrawer = ({ visible, record, onClose, onApprovalChange }) => {
       pending: 'orange',
       approved: 'green',
       rejected: 'red'
-    };
+    };//状态对应颜色
     return colors[status] || 'default';
   };
 
   return (
+    // 详情抽屉
     <Drawer
       title="审批单详情"
       placement="right"
@@ -79,6 +87,7 @@ const DetailDrawer = ({ visible, record, onClose, onApprovalChange }) => {
         )
       }
     >
+      {/* 详情描述列表 */}
       <Descriptions column={1} bordered size="small">
         <Descriptions.Item label="审批项目">
           {record.projectName}

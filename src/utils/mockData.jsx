@@ -10,7 +10,7 @@ export const mockApprovals = [
     approveTime: "--",
     applicant: "张三",
     approver: "李四",
-    attachments: []
+    attachments: [] // 附件列表
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ export const mockApprovals = [
     attachments: []
   }
 ];
-
+// 部门级联选择数据
 export const departmentOptions = [
   {
     value: '市场部',

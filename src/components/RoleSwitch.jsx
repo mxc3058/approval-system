@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Space } from 'antd';
-import { UserOutlined, TeamOutlined } from '@ant-design/icons';
+import { UserOutlined, TeamOutlined } from '@ant-design/icons';//图标
 import { useRole } from '../contexts/RoleContext';
 import { spaceChildren } from 'antd/es/button';
 
@@ -12,7 +12,7 @@ const RoleSwitch = () => {
       <span>当前角色：</span>
       <Button
         type={role === 'applicant' ? 'primary' : 'default'}
-        icon={role === 'applicant' ? <UserOutlined /> : <TeamOutlined />}
+        icon={role === 'applicant' ? <UserOutlined /> : <TeamOutlined />}//图标切换
         onClick={toggleRole}
       >
         {role === 'applicant' ? '申请人' : '审批人'}
